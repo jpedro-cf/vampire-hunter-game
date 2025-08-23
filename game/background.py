@@ -1,4 +1,4 @@
-from game.entity import Entity
+from game.character import Entity
 
 
 class Background(Entity):

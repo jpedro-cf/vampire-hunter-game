@@ -5,7 +5,7 @@ import pygame
 from game.character_spritesheet import CharacterAnimations
 
 
-class Entity(ABC):
+class Character(ABC):
     def __init__(
         self,
         name: str,
@@ -31,11 +31,25 @@ class Entity(ABC):
     def move(self):
         pass
 
+    @abstractmethod
+    def attack(self):
+        pass
+
+    @abstractmethod
+    def die(self):
+        self.state = "death"
+        self.animation = self.spritesheet[self.state][self.direction].iter()
+
+    @abstractmethod
+    def hurt(self):
+        self.state = "hurt"
+        self.animation = self.spritesheet[self.state][self.direction].iter()
+
     def update_animation(self):
         try:
             self.image = self.animation.next()
         except StopIteration:
-            if self.state == "attack":
+            if self.state in ["attack", "hurt", "death"]:
                 self.state = "idle"
                 self.animation = self.spritesheet[self.state][self.direction].iter()
             self.image = self.animation.next()

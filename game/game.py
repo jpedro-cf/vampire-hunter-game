@@ -11,13 +11,11 @@ class Game:
     def __init__(self):
         pygame.init()
         self.window = pygame.display.set_mode(size=(SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.FPS = 60
         self.clock = pygame.time.Clock()
-        self.player = Player("player", 1, Animations().player_animations, self.window)
 
     def run(self):
-        level = Level("level1", 1, self)
         running = True
+        level = Level("level1", 1, self.window)
         while running:
             # menu = Menu(self.window).run()
 
@@ -25,14 +23,8 @@ class Game:
                 if event.type == pygame.QUIT:
                     running = False
 
-            self.window.fill((0, 0, 0))
+            level.run()
 
-            keys = pygame.key.get_pressed()
-            self.player.move(keys)
-            self.player.update_animation()
-            self.player.draw()
-
-            pygame.display.flip()
-            self.clock.tick(self.FPS)
+            self.clock.tick(60)
 
         pygame.quit()
