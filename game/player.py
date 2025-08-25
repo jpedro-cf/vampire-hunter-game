@@ -1,5 +1,6 @@
 import pygame
 from game.character import Character
+from game.const import SCREEN_HEIGHT, SCREEN_WIDTH
 
 
 class Player(Character):
@@ -7,6 +8,9 @@ class Player(Character):
         super().__init__(name, animations, surface)
         self.x, self.y = x, y
         self.speed = 2
+        self.damage = 35
+
+        self.width, self.height = 64, 64
 
     def move(self):
         keys = pygame.key.get_pressed()
@@ -15,21 +19,24 @@ class Player(Character):
 
         direction = self.direction
         if keys[pygame.K_w]:
-            self.y -= self.speed
+            self.y = max(0, self.y - self.speed)
             direction = "up"
             moving = True
         elif keys[pygame.K_s]:
-            self.y += self.speed
+            self.y = min(SCREEN_HEIGHT - self.height, self.y + self.speed)
             direction = "down"
             moving = True
         elif keys[pygame.K_a]:
-            self.x -= self.speed
+            self.x = max(0, self.x - self.speed)
             direction = "left"
             moving = True
         elif keys[pygame.K_d]:
-            self.x += self.speed
+            self.x = min(SCREEN_WIDTH - self.width, self.x + self.speed)
             direction = "right"
             moving = True
+
+        if self.state in ["hurt", "death"]:
+            return
 
         if keys[pygame.K_e]:
             self.state = "attack"

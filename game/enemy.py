@@ -1,3 +1,4 @@
+import math
 import random
 import pygame
 from game.character import Character
@@ -8,6 +9,9 @@ class Enemy(Character):
     def __init__(self, name, animations, surface):
         super().__init__(name, animations, surface)
         self.player = None
+
+        self.attack_cooldown = 3000
+        self.last_attack_time = 0
 
     def move(self):
         if self.state in ["attack", "hurt", "death"]:
@@ -36,12 +40,23 @@ class Enemy(Character):
         else:
             self.direction = "down" if pos_y > 0 else "up"
 
+        dx = player_x - self.x
+        dy = player_y - self.y
+        distance = math.hypot(dx, dy)
+
+        attack_range = 50
+
+        if distance <= attack_range:
+            self.attack()
+
         if (self.state, self.direction) != (prev_state, prev_direction):
             self.animation = self.spritesheet[self.state][self.direction].iter()
 
     def attack(self):
-        self.state = "attack"
-        return super().attack()
+        current_time = pygame.time.get_ticks()
+        if current_time - self.last_attack_time >= self.attack_cooldown:
+            self.state = "attack"
+            self.last_attack_time = current_time
 
     def hurt(self):
         return super().hurt()

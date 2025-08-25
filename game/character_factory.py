@@ -5,6 +5,7 @@ from pygame import Surface
 from game.character_spritesheet import Animations
 from game.const import SCREEN_HEIGHT, SCREEN_WIDTH
 from game.enemy import Enemy
+from game.loots import DamageLoot, HealthLoot, SpeedLoot
 from game.player import Player
 
 
@@ -34,3 +35,18 @@ class CharacterFactory:
                     "player", Animations().player_animations, surface, 150, 150
                 )
                 return player
+
+            case "loot":
+                name = str(uuid.uuid4())
+                x = random.randint(0, SCREEN_WIDTH)
+                y = random.randint(0, SCREEN_HEIGHT)
+
+                objects = {
+                    1: SpeedLoot(name, "speed", surface, x, y),
+                    2: HealthLoot(name, "health", surface, x, y),
+                    3: DamageLoot(name, "damage", surface, x, y),
+                }
+
+                index = random.randint(1, 3)
+
+                return objects[index]

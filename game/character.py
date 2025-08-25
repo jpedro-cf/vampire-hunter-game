@@ -42,6 +42,9 @@ class Character(ABC):
 
     @abstractmethod
     def hurt(self):
+        if self.state == "death":
+            return
+
         self.state = "hurt"
         self.animation = self.spritesheet[self.state][self.direction].iter()
 
