@@ -52,7 +52,7 @@ class HealthLoot(Object):
 
         self.target = target
 
-        self.target.health *= 1.5
+        self.target.health += 10
 
         super().apply_effect(target)
 

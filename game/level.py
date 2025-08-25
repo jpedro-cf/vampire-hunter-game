@@ -24,6 +24,10 @@ class Level:
 
         self.player = CharacterFactory.get_entity("player", self.level, self.surface)
 
+        self.image = pygame.image.load(
+            "./assets/backgrounds/terrace.png"
+        ).convert_alpha()
+
         for _ in range(self.enemies_per_time * self.level):
             enemy = CharacterFactory.get_entity("enemy", self.level, self.surface)
             enemy.player = self.player
@@ -37,15 +41,11 @@ class Level:
                 if event.type == pygame.QUIT:
                     running = False
 
-            if not self.player:
-                self.player = CharacterFactory.get_entity(
-                    "player", self.level, self.surface
-                )
-
             if not self.enemies:
                 self.spawn_enemies()
 
-            self.surface.fill((0, 0, 0))
+            self.surface.blit(self.image, (0, 0))
+            # self.surface.fill((0, 0, 0))
 
             current_time = pygame.time.get_ticks()
 
@@ -60,6 +60,9 @@ class Level:
             for key in list(self.enemies.keys()):
                 enemy = self.enemies[key]
 
+                if not self.player:
+                    return
+
                 CharacterMediator.verify_attack(self.player, enemy)
                 CharacterMediator.verify_attack(enemy, self.player)
 
@@ -71,6 +74,7 @@ class Level:
                     enemy.animation.images
                 ):
                     self.enemies.pop(key)
+
                 if self.player.health <= 0 and self.player.animation.i >= len(
                     self.player.animation.images
                 ):

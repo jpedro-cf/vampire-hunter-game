@@ -15,14 +15,18 @@ class Game:
 
     def run(self):
         running = True
-        level = Level("level1", 1, self.window)
         while running:
-            # menu = Menu(self.window).run()
+            menu_option = Menu(self.window).run()
+
+            if menu_option == "EXIT":
+                running = False
+                break
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
 
+            level = Level("level1", 1, self.window)
             level.run()
 
             self.clock.tick(60)

@@ -7,6 +7,9 @@ class CharacterMediator:
 
     @staticmethod
     def verify_attack(character: Character, target: Character):
+        if not character:
+            return
+
         if character.state != "attack" or target.state == "death":
             return
 
