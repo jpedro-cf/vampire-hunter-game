@@ -16,7 +16,7 @@ class Level:
         self.surface = surface
 
         self.spawn_delay = 30 * 1000
-        self.last_spawn_time = 0
+        self.last_spawn_time = self.spawn_delay * 2
         self.enemies_per_time = 2
 
         self.loots_delay = 15 * 1000
@@ -28,10 +28,10 @@ class Level:
             "./assets/backgrounds/terrace.png"
         ).convert_alpha()
 
-        for _ in range(self.enemies_per_time * self.level):
-            enemy = CharacterFactory.get_entity("enemy", self.level, self.surface)
-            enemy.player = self.player
-            self.enemies[enemy.name] = enemy
+        # for _ in range(self.enemies_per_time * self.level):
+        #     enemy = CharacterFactory.get_entity("enemy", self.level, self.surface)
+        #     enemy.player = self.player
+        #     self.enemies[enemy.name] = enemy
 
     def run(self):
         running = True
@@ -45,7 +45,6 @@ class Level:
                 self.spawn_enemies()
 
             self.surface.blit(self.image, (0, 0))
-            # self.surface.fill((0, 0, 0))
 
             current_time = pygame.time.get_ticks()
 
@@ -61,7 +60,7 @@ class Level:
                 enemy = self.enemies[key]
 
                 if not self.player:
-                    return
+                    break
 
                 CharacterMediator.verify_attack(self.player, enemy)
                 CharacterMediator.verify_attack(enemy, self.player)
@@ -78,6 +77,7 @@ class Level:
                 if self.player.health <= 0 and self.player.animation.i >= len(
                     self.player.animation.images
                 ):
+                    self.player.draw()
                     self.player = None
 
             for key in list(self.loots.keys()):
@@ -94,7 +94,7 @@ class Level:
                 CharacterMediator.verify_collision(self.player, loot)
 
             if not self.player:
-                break
+                return
 
             self.player.move()
             self.player.update_animation()

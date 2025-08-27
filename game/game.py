@@ -3,7 +3,7 @@ import pygame
 from game.character_spritesheet import Animations
 from game.const import SCREEN_HEIGHT, SCREEN_WIDTH
 from game.level import Level
-from game.menu import Menu
+from game.menu import DeathMenu, Menu
 from game.player import Player
 
 
@@ -26,8 +26,13 @@ class Game:
                 if event.type == pygame.QUIT:
                     running = False
 
-            level = Level("level1", 1, self.window)
-            level.run()
+            option = "TRY AGAIN"
+            death_menu = DeathMenu(self.window)
+            while option != "EXIT":
+                level = Level("level1", 1, self.window)
+                level.run()
+
+                option = death_menu.run()
 
             self.clock.tick(60)
 

@@ -185,7 +185,7 @@ class Animations:
                     ),
                     7,
                     1,
-                    True,
+                    False,
                     12,
                 ),
                 "left": SpriteSheetAnimation(
@@ -198,7 +198,7 @@ class Animations:
                     ),
                     7,
                     1,
-                    True,
+                    False,
                     12,
                 ),
                 "right": SpriteSheetAnimation(
@@ -211,7 +211,7 @@ class Animations:
                     ),
                     7,
                     1,
-                    True,
+                    False,
                     12,
                 ),
                 "up": SpriteSheetAnimation(
@@ -224,7 +224,7 @@ class Animations:
                     ),
                     7,
                     1,
-                    True,
+                    False,
                     12,
                 ),
             },

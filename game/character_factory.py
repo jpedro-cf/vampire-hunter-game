@@ -23,7 +23,7 @@ class CharacterFactory:
                 enemy.x, enemy.y = x, y
 
                 base_speed = 1
-                base_damage = 25
+                base_damage = 50
 
                 enemy.damage = base_damage + 10 * (level - 1)  # 10 por nivel
                 enemy.speed = base_speed + 0.25 * (level - 1)  # 0.25 por nivel

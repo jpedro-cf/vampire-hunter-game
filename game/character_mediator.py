@@ -31,6 +31,8 @@ class CharacterMediator:
 
     @staticmethod
     def verify_collision(character: Character, obj: Object):
+        if not character:
+            return False
         dx = obj.x - character.x
         dy = obj.y - character.y
         distance = math.hypot(dx, dy)
