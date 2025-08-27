@@ -3,6 +3,7 @@ import pygame
 from game.character import Character
 from game.character_factory import CharacterFactory
 from game.character_mediator import CharacterMediator
+from game.const import C_WHITE, SCREEN_HEIGHT, SCREEN_WIDTH
 from game.object import Object
 
 
@@ -100,6 +101,22 @@ class Level:
             self.player.update_animation()
             self.player.draw()
 
+            self.level_text(
+                14,
+                f"Level {self.level}",
+                C_WHITE,
+                (10, 5),
+            )
+            self.level_text(
+                14, f"fps: {clock.get_fps():.0f}", C_WHITE, (10, SCREEN_WIDTH - 35)
+            )
+            self.level_text(
+                14,
+                f"Vida: {self.player.health}",
+                C_WHITE,
+                (10, SCREEN_HEIGHT - 20),
+            )
+
             pygame.display.flip()
 
             clock.tick(60)
@@ -114,3 +131,13 @@ class Level:
     def spawn_loot(self):
         loot = CharacterFactory.get_entity("loot", self.spawn_delay, self.surface)
         self.loots[loot.name] = loot
+
+    def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple):
+        text_font: pygame.Font = pygame.font.SysFont(
+            name="Lucida Sans Typewriter", size=text_size
+        )
+        text_surf: pygame.Surface = text_font.render(
+            text, True, text_color
+        ).convert_alpha()
+        text_rect: pygame.Rect = text_surf.get_rect(left=text_pos[0], top=text_pos[1])
+        self.surface.blit(source=text_surf, dest=text_rect)
