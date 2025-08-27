@@ -11,14 +11,17 @@ class Character(ABC):
         name: str,
         animations: CharacterAnimations,
         surface: pygame.Surface,
+        play_area: pygame.Rect,
     ):
         self.name = name
 
         self.x, self.y = 0, 0
+        self.play_area = play_area
 
         self.speed = 1
         self.health = 100
         self.damage = 10
+        self.attack_range = 50
 
         self.direction, self.state = "down", "idle"
         self.spritesheet: CharacterAnimations = animations

@@ -9,6 +9,8 @@ from game.object import Object
 
 class Level:
     def __init__(self, name: str, level: int, surface: pygame.Surface):
+        self.levels = {0: 1, 10: 2, 25: 3, 50: 4, 100: 5}
+
         self.name = name
         self.level = level
         self.enemies: Dict[str, Character] = {}
@@ -20,19 +22,16 @@ class Level:
         self.last_spawn_time = self.spawn_delay * 2
         self.enemies_per_time = 2
 
-        self.loots_delay = 15 * 1000
+        self.loots_delay = 10 * 1000
         self.last_loot_time = 0
 
-        self.player = CharacterFactory.get_entity("player", self.level, self.surface)
+        self.play_area = pygame.Rect(100, 225, 600, 360)
 
-        self.image = pygame.image.load(
-            "./assets/backgrounds/terrace.png"
-        ).convert_alpha()
-
-        # for _ in range(self.enemies_per_time * self.level):
-        #     enemy = CharacterFactory.get_entity("enemy", self.level, self.surface)
-        #     enemy.player = self.player
-        #     self.enemies[enemy.name] = enemy
+        self.player = CharacterFactory.get_entity(
+            "player", self.level, self.surface, self.play_area
+        )
+        self.image = pygame.image.load("./assets/backgrounds/terrace.png").convert()
+        self.image = pygame.transform.scale(self.image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
     def run(self):
         running = True
@@ -74,6 +73,7 @@ class Level:
                     enemy.animation.images
                 ):
                     self.enemies.pop(key)
+                    self.player.kills += 1
 
                 if self.player.health <= 0 and self.player.animation.i >= len(
                     self.player.animation.images
@@ -97,6 +97,9 @@ class Level:
             if not self.player:
                 return
 
+            if self.player.kills in self.levels:
+                self.level = self.levels[self.player.kills]
+
             self.player.move()
             self.player.update_animation()
             self.player.draw()
@@ -107,14 +110,30 @@ class Level:
                 C_WHITE,
                 (10, 5),
             )
+
             self.level_text(
-                14, f"fps: {clock.get_fps():.0f}", C_WHITE, (10, SCREEN_WIDTH - 35)
+                14,
+                f"Kills: {self.player.kills}",
+                C_WHITE,
+                (10, SCREEN_HEIGHT - 20),
             )
             self.level_text(
                 14,
                 f"Vida: {self.player.health}",
                 C_WHITE,
-                (10, SCREEN_HEIGHT - 20),
+                (10, SCREEN_HEIGHT - 40),
+            )
+            self.level_text(
+                14,
+                f"Dano: {self.player.damage}",
+                C_WHITE,
+                (10, SCREEN_HEIGHT - 60),
+            )
+            self.level_text(
+                14,
+                f"Velocidade: {self.player.speed}",
+                C_WHITE,
+                (10, SCREEN_HEIGHT - 80),
             )
 
             pygame.display.flip()
@@ -124,12 +143,16 @@ class Level:
 
     def spawn_enemies(self):
         for _ in range(self.enemies_per_time * self.level):
-            enemy = CharacterFactory.get_entity("enemy", self.level, self.surface)
+            enemy = CharacterFactory.get_entity(
+                "enemy", self.level, self.surface, self.play_area
+            )
             enemy.player = self.player
             self.enemies[enemy.name] = enemy
 
     def spawn_loot(self):
-        loot = CharacterFactory.get_entity("loot", self.spawn_delay, self.surface)
+        loot = CharacterFactory.get_entity(
+            "loot", self.spawn_delay, self.surface, self.play_area
+        )
         self.loots[loot.name] = loot
 
     def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple):

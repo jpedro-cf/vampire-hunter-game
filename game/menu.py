@@ -29,6 +29,19 @@ class Menu:
                 else:
                     self.menu_text(20, option, (255, 255, 255), text_position)
 
+            controls = (
+                "Controles:",
+                "W - Cima",
+                "S - Baixo",
+                "A - Esquerda",
+                "D - Direita",
+                "E - Atacar",
+            )
+
+            for i, line in enumerate(controls):
+                text_position = ((SCREEN_WIDTH / 2), 300 + 25 * i)
+                self.menu_text(16, line, (255, 255, 255), text_position)
+
             pygame.display.flip()
 
             for event in pygame.event.get():

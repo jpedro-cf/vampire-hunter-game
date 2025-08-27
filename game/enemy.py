@@ -6,8 +6,8 @@ from game.player import Player
 
 
 class Enemy(Character):
-    def __init__(self, name, animations, surface):
-        super().__init__(name, animations, surface)
+    def __init__(self, name, animations, surface, play_area):
+        super().__init__(name, animations, surface, play_area)
         self.player = None
 
         self.attack_cooldown = 3000

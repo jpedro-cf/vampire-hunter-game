@@ -4,11 +4,14 @@ from game.const import SCREEN_HEIGHT, SCREEN_WIDTH
 
 
 class Player(Character):
-    def __init__(self, name, animations, surface, x=0, y=0):
-        super().__init__(name, animations, surface)
+    def __init__(self, name, animations, surface, x, y, play_area: pygame.Rect):
+        super().__init__(name, animations, surface, play_area)
         self.x, self.y = x, y
         self.speed = 2
         self.damage = 35
+        self.attack_range = 30
+
+        self.kills = 0
 
         self.width, self.height = 64, 64
 
@@ -19,19 +22,19 @@ class Player(Character):
 
         direction = self.direction
         if keys[pygame.K_w]:
-            self.y = max(0, self.y - self.speed)
+            self.y = max(self.play_area.top, self.y - self.speed)
             direction = "up"
             moving = True
         elif keys[pygame.K_s]:
-            self.y = min(SCREEN_HEIGHT - self.height, self.y + self.speed)
+            self.y = min(self.play_area.bottom - self.height, self.y + self.speed)
             direction = "down"
             moving = True
         elif keys[pygame.K_a]:
-            self.x = max(0, self.x - self.speed)
+            self.x = max(self.play_area.left, self.x - self.speed)
             direction = "left"
             moving = True
         elif keys[pygame.K_d]:
-            self.x = min(SCREEN_WIDTH - self.width, self.x + self.speed)
+            self.x = min(self.play_area.right - self.width, self.x + self.speed)
             direction = "right"
             moving = True
 

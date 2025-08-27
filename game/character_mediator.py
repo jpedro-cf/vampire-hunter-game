@@ -20,11 +20,9 @@ class CharacterMediator:
         dy = target.y - character.y
         distance = math.hypot(dx, dy)
 
-        attack_range = 40
-
-        if distance <= attack_range:
+        if distance <= character.attack_range:
             target.hurt()
-            target.health -= character.damage
+            target.health = max(0, target.health - character.damage)
 
         if target.health <= 0:
             target.die()
