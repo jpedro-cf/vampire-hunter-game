@@ -95,10 +95,13 @@ class Level:
                 CharacterMediator.verify_collision(self.player, loot)
 
             if not self.player:
-                return
+                return False
 
             if self.player.kills in self.levels:
                 self.level = self.levels[self.player.kills]
+
+            if self.player.kills >= 150:
+                return True
 
             self.player.move()
             self.player.update_animation()
@@ -113,7 +116,7 @@ class Level:
 
             self.level_text(
                 14,
-                f"Kills: {self.player.kills}",
+                f"Kills: {self.player.kills}/150",
                 C_WHITE,
                 (10, SCREEN_HEIGHT - 20),
             )
